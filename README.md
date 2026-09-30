@@ -1,5 +1,7 @@
 # ARCore Depth Hazard Detection
 
+[![Android CI](https://github.com/Jr34374/arcore-depth-hazard-detection/actions/workflows/android.yml/badge.svg)](https://github.com/Jr34374/arcore-depth-hazard-detection/actions/workflows/android.yml)
+
 ARCore の Depth API と OpenCV を使い、歩行方向にある障害物の距離と下端の高さを推定する Android アプリです。視覚障害者の歩行支援を題材にした卒業研究として開発しました。
 
 > This Android research prototype estimates the distance and bottom height of obstacles using ARCore Depth and OpenCV.
@@ -65,7 +67,7 @@ Android Studioでこのディレクトリを開くか、JDK 17とAndroid SDKを�
 
 ## リポジトリの方針
 
-- 卒業研究完成時点の状態は `v0.1.0-graduation-snapshot` として保存予定です。
+- 卒業研究完成時点の状態は `v0.1.0-graduation-snapshot` として保存しています。
 - 研究資料・実験データ・開発途中の記録は、別のPrivateリポジトリで保管します。
 - `main` では機能を保ちながら、責務分割、テスト、UI、アクセシビリティ、性能を改善します。
 
