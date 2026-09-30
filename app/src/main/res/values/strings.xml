@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Depth_GPU</string>
+    <string name="depth_info_text">DepthMap size: %1$d x %2$d</string>
+</resources>
