@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>ARCore Depth Hazard Detection — Portfolio</title>
+  <style>
+    @page { size: A4 landscape; margin: 0; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: #172033;
+      background: #e8edf3;
+      font-family: "Yu Gothic", "Meiryo", sans-serif;
+      font-size: 12px;
+      line-height: 1.65;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .page {
+      width: 297mm;
+      height: 210mm;
+      padding: 16mm 18mm 14mm;
+      background: #fff;
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+    }
+    .page:last-child { page-break-after: auto; }
+    .accent { color: #007b83; }
+    h1 { margin: 0; font-size: 34px; line-height: 1.2; letter-spacing: .01em; }
+    h2 { margin: 0 0 5mm; font-size: 23px; line-height: 1.25; }
+    h3 { margin: 0 0 2mm; font-size: 15px; color: #007b83; }
+    p { margin: 0 0 3mm; }
+    ul, ol { margin: 0; padding-left: 1.45em; }
+    li { margin-bottom: 1.2mm; }
+    .eyebrow { color: #007b83; font-weight: 700; letter-spacing: .12em; }
+    .lead { margin-top: 5mm; max-width: 212mm; font-size: 18px; line-height: 1.7; font-weight: 600; }
+    .muted { color: #5f6b7a; }
+    .small { font-size: 10px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8mm; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5mm; }
+    .card {
+      border: 1px solid #dbe3ea;
+      border-radius: 4mm;
+      padding: 5mm;
+      background: #fbfcfd;
+    }
+    .metric {
+      border-top: 1.5mm solid #00a0a8;
+      background: #f3fafb;
+      padding: 5mm;
+      min-height: 35mm;
+    }
+    .metric .number { font-size: 26px; line-height: 1.2; font-weight: 800; color: #007b83; }
+    .metric .label { margin-top: 2mm; font-weight: 700; }
+    .hero-rule { width: 35mm; height: 1.5mm; margin: 7mm 0; background: #00a0a8; }
+    .role-table { width: 100%; border-collapse: collapse; margin-top: 4mm; }
+    .role-table th, .role-table td { border-bottom: 1px solid #dbe3ea; padding: 2.4mm 2mm; text-align: left; vertical-align: top; }
+    .role-table th { width: 29mm; color: #5f6b7a; font-weight: 600; }
+    .image-frame { border: 1px solid #dbe3ea; border-radius: 3mm; padding: 3mm; background: #fff; }
+    .image-frame img { display: block; width: 100%; height: 100%; object-fit: contain; }
+    .process-image { width: 84mm; height: 115mm; }
+    .model-image { width: 126mm; height: 64mm; }
+    .experiment-photo { width: 64mm; height: 86mm; }
+    .experiment-diagram { width: 126mm; height: 77mm; }
+    .step { display: grid; grid-template-columns: 10mm 1fr; gap: 3mm; margin-bottom: 3.3mm; }
+    .step-no { width: 8mm; height: 8mm; border-radius: 50%; background: #007b83; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+    .result-table { width: 100%; border-collapse: collapse; }
+    .result-table th, .result-table td { border-bottom: 1px solid #dbe3ea; padding: 2.2mm; text-align: left; }
+    .result-table th { color: #5f6b7a; }
+    .notice { border-left: 1.5mm solid #f0a330; padding: 3mm 4mm; background: #fff8eb; }
+    .tag { display: inline-block; margin: 0 1.5mm 1.5mm 0; padding: 1.2mm 3mm; border-radius: 99px; background: #e9f5f6; color: #006b72; font-weight: 700; }
+    .footer { position: absolute; left: 18mm; right: 18mm; bottom: 7mm; display: flex; justify-content: space-between; color: #6b7785; font-size: 9px; }
+    .repo-link { font-size: 17px; font-weight: 700; color: #007b83; text-decoration: none; }
+    .takeaway { margin-top: 5mm; padding: 5mm 6mm; border-radius: 4mm; background: #142c46; color: #fff; font-size: 15px; line-height: 1.75; }
+  </style>
+</head>
+<body>
+  <section class="page">
+    <div class="eyebrow">ANDROID / ARCORE / COMPUTER VISION / ACCESSIBILITY</div>
+    <div class="hero-rule"></div>
+    <h1>ARCore Depth<br><span class="accent">Hazard Detection</span></h1>
+    <p class="lead">白杖では捉えにくい高所障害物の距離と下端高さを、対応するAndroidスマートフォンで推定する研究用アプリ</p>
+
+    <div class="grid-3" style="margin-top: 10mm;">
+      <div class="metric"><div class="number">135</div><div class="label">評価試行</div><div class="muted">27条件 × 各5回</div></div>
+      <div class="metric"><div class="number">88.97%</div><div class="label">高さ近似率</div><div class="muted">検知できた試行の平均</div></div>
+      <div class="metric"><div class="number">4.181 m</div><div class="label">平均初検知距離</div><div class="muted">評価実験における平均</div></div>
+    </div>
+
+    <div class="grid-2" style="margin-top: 8mm;">
+      <div class="card">
+        <h3>課題</h3>
+        <p>吊り下げ看板や木の枝など、胸部・頭部付近の障害物は白杖の探索範囲に入りにくく、衝突前の把握が難しい。</p>
+      </div>
+      <div class="card">
+        <h3>提案</h3>
+        <p>専用LiDARを必須とせず、ARCore DepthとRGB画像処理を組み合わせて障害物下端の高さを推定する。</p>
+      </div>
+    </div>
+
+    <table class="role-table">
+      <tr><th>開発形態</th><td>個人開発・2025年度卒業研究</td></tr>
+      <tr><th>担当範囲</th><td>課題設定、手法設計、Android実装、評価実験、統計分析、論文執筆</td></tr>
+      <tr><th>実験端末</th><td>Google Pixel 7a</td></tr>
+    </table>
+
+    <div class="footer"><span>ARCore Depth Hazard Detection</span><span>1 / 4</span></div>
+  </section>
+
+  <section class="page">
+    <h2>提案手法 — 深度とRGBの弱点を補完する</h2>
+    <div style="display:grid; grid-template-columns: 90mm 1fr; gap: 9mm;">
+      <div class="image-frame process-image"><img src="../images/processing-pipeline.png" alt="処理例"></div>
+      <div>
+        <div class="step"><div class="step-no">1</div><div><strong>深度取得</strong><br><span class="muted">ARCoreから16 bit深度画像とカメラ内部パラメータを取得</span></div></div>
+        <div class="step"><div class="step-no">2</div><div><strong>動的二値化</strong><br><span class="muted">画面上部20%の深度中央値を、フレームごとの背景深度に設定</span></div></div>
+        <div class="step"><div class="step-no">3</div><div><strong>領域の分離</strong><br><span class="muted">検出範囲を制限し、収縮処理で床・壁との微細な連結を切り離す</span></div></div>
+        <div class="step"><div class="step-no">4</div><div><strong>下端補正</strong><br><span class="muted">RGB画像のCannyエッジで、低解像度深度画像の境界を補正</span></div></div>
+        <div class="step"><div class="step-no">5</div><div><strong>高さ推定</strong><br><span class="muted">深度中央値とピンホールカメラモデルから距離・下端高さを算出</span></div></div>
+        <div class="step"><div class="step-no">6</div><div><strong>評価可能な記録</strong><br><span class="muted">推定値、距離、マスク、深度画像をJSON・PNGとして保存</span></div></div>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 132mm 1fr; gap: 9mm; margin-top: 7mm; align-items:center;">
+      <div class="image-frame model-image"><img src="../images/height-estimation-model.png" alt="高さ推定モデル"></div>
+      <div class="card">
+        <h3>設計上の工夫</h3>
+        <ul>
+          <li>平均値ではなく中央値を使い、深度の飛び値に耐える</li>
+          <li>焦点距離を端末から取得し、端末固有の内部パラメータへ対応</li>
+          <li>画像処理を10フレームごとに実行し、リアルタイム描画との負荷を分離</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer"><span>ARCore Depth Hazard Detection</span><span>2 / 4</span></div>
+  </section>
+
+  <section class="page">
+    <h2>評価 — 精度と信頼性を分けて検証</h2>
+    <div style="display:grid; grid-template-columns: 68mm 132mm 1fr; gap: 7mm; align-items:start;">
+      <div class="image-frame experiment-photo"><img src="../images/experiment-obstacle.png" alt="実験障害物"></div>
+      <div class="image-frame experiment-diagram"><img src="../images/experiment-setup.png" alt="実験条件"></div>
+      <div class="card">
+        <h3>実験条件</h3>
+        <ul>
+          <li>色：黒・赤・白</li>
+          <li>一辺：500 / 300 / 100 mm</li>
+          <li>下端高さ：1.0 / 1.4 / 1.8 m</li>
+          <li>27条件 × 5回 = 135試行</li>
+          <li>開始距離5.0 m、カメラ高1.5 m</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-top: 6mm;">
+      <div class="metric"><div class="number">88.97%</div><div class="label">高さ近似率</div><div class="muted">検知できた試行の平均</div></div>
+      <div class="metric"><div class="number">31.62%</div><div class="label">有効データ率</div><div class="muted">高さ推定に成功したフレームの割合</div></div>
+      <div class="metric"><div class="number">p = 0.00001</div><div class="label">大きさの有意差</div><div class="muted">F(2,132) = 12.57</div></div>
+    </div>
+
+    <div class="grid-2" style="margin-top: 6mm;">
+      <div>
+        <h3>障害物サイズ別の平均近似率</h3>
+        <table class="result-table">
+          <tr><th>一辺</th><th>500 mm</th><th>300 mm</th><th>100 mm</th></tr>
+          <tr><td>近似率</td><td><strong>91.56%</strong></td><td><strong>87.48%</strong></td><td><strong>58.21%</strong></td></tr>
+        </table>
+      </div>
+      <div class="notice">
+        <strong>結果の解釈</strong><br>
+        高さを推定できた場合の精度は高い一方、有効データ率は31.62%にとどまった。小さい障害物ほど深度画像上の領域が不足し、検知が不安定になることを定量的に確認した。
+      </div>
+    </div>
+
+    <div class="footer"><span>ARCore Depth Hazard Detection</span><span>3 / 4</span></div>
+  </section>
+
+  <section class="page">
+    <h2>成果と次の改善</h2>
+    <div class="grid-2">
+      <div>
+        <div class="card">
+          <h3>身につけた・実践したこと</h3>
+          <ul>
+            <li>社会課題から検証可能な研究課題へ落とし込む</li>
+            <li>ARCore、OpenCV、カメラ幾何を統合したAndroid実装</li>
+            <li>比較可能な条件設計と135試行のデータ収集</li>
+            <li>成功例だけでなく、有効データ率と失敗条件を分析</li>
+            <li>一元配置分散分析による要因の定量評価</li>
+            <li>GitHub Actionsによる再現可能なビルド環境の整備</li>
+          </ul>
+        </div>
+        <div style="margin-top:5mm;">
+          <span class="tag">Kotlin</span><span class="tag">Android</span><span class="tag">ARCore</span><span class="tag">OpenCV</span><span class="tag">OpenGL ES</span><span class="tag">Computer Vision</span><span class="tag">Accessibility</span>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h3>明らかになった制約</h3>
+          <ul>
+            <li>小さい物体や床面に近い物体の検知が不安定</li>
+            <li>照明、反射、端末姿勢、色の組み合わせの影響を受ける</li>
+            <li>ユーザーへの音声・振動通知は未実装</li>
+            <li>実環境・複数端末・当事者を含む評価は未実施</li>
+          </ul>
+        </div>
+        <div class="card" style="margin-top:5mm;">
+          <h3>今後取り組むこと</h3>
+          <ul>
+            <li>環境に応じた閾値と検出領域の適応化</li>
+            <li>小物体検知と有効データ率の改善</li>
+            <li>画像処理ロジックのモジュール化とテスト</li>
+            <li>音声・振動を用いた安全な通知設計</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="takeaway">この研究では「動いた」で終わらせず、精度・検知安定性・失敗条件を分けて評価しました。技術を社会課題へ適用し、実験結果から次の改善点を具体化するまでを一貫して経験したプロジェクトです。</div>
+
+    <div style="margin-top: 10mm;">
+      <div class="eyebrow">SOURCE CODE / README / BUILD STATUS</div>
+      <a class="repo-link" href="https://github.com/Jr34374/arcore-depth-hazard-detection">github.com/Jr34374/arcore-depth-hazard-detection</a>
+      <p class="small muted" style="margin-top:2mm;">研究用プロトタイプであり、実際の歩行時の安全装置として単独で使用できるものではありません。</p>
+    </div>
+
+    <div class="footer"><span>ARCore Depth Hazard Detection</span><span>4 / 4</span></div>
+  </section>
+</body>
+</html>
